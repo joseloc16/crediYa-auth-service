@@ -15,12 +15,12 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class User {
     private String id;
-    private String nombre;
-    private String apellido;
+    private String firstName;
+    private String lastName;
     private String email;
-    private String documentoIdentidad;
-    private String telefono;
-    private Long idRol;
-    private BigDecimal salarioBase;
-    //private LocalDate fechaNacimiento;
+    private String identityDocument;
+    private String phoneNumber;
+    private Long roleId;
+    private BigDecimal baseSalary;
+    //private LocalDate birthDate;
 }

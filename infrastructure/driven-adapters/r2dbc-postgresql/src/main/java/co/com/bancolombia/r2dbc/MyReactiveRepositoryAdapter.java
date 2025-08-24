@@ -15,7 +15,7 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     UserEntity,
     String,
     MyReactiveRepository
-> implements UserRepository {
+    > implements UserRepository {
     public MyReactiveRepositoryAdapter(MyReactiveRepository repository, ObjectMapper mapper) {
         super(repository, mapper, entity -> mapper.map(entity, User.class));
     }
@@ -24,6 +24,7 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<User> save(User user) {
         return super.save(user);
     }
+
     @Override
     public Flux<User> findAll() {
         return super.findAll();
@@ -39,4 +40,13 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         return repository.deleteById(id);
     }
 
+    @Override
+    public Mono<Boolean> existsByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public Mono<Boolean> existsByDocument(String document) {
+        return null;
+    }
 }

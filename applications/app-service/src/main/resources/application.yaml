@@ -23,11 +23,17 @@ management:
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
 
+routes:
+  paths:
+    users: "/api/v1/usuarios"
+    usersById: "/api/v1/usuarios/{id}"
+    usersExists: "/api/v1/usuarios/exists"
+
 adapters:
   r2dbc:
     host: "localhost"
-    port: 5433
-    database: "crediYaDB"
+    port: 5432
+    database: "crediya-db"
     schema: "public"
-    username: ${R2DBC_USERNAME}
-    password: ${R2DBC_PASS}
+    username: "joseloc"
+    password: "crediya"

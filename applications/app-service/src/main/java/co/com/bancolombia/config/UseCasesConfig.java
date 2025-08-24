@@ -1,14 +1,16 @@
 package co.com.bancolombia.config;
 
-import org.springframework.context.annotation.ComponentScan;
+import co.com.bancolombia.model.user.gateways.UserRepository;
+import co.com.bancolombia.usecase.user.UserUseCase;
+import co.com.bancolombia.usecase.user.input.UserUseCasePort;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 
 @Configuration
-@ComponentScan(basePackages = "co.com.bancolombia.usecase",
-        includeFilters = {
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^.+UseCase$")
-        },
-        useDefaultFilters = false)
 public class UseCasesConfig {
+
+        @Bean
+        public UserUseCasePort userUseCasePort(UserRepository repository) {
+                return new UserUseCase(repository);
+        }
 }
