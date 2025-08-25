@@ -6,7 +6,6 @@ import co.com.bancolombia.usecase.user.exception.EmailAlreadyUsedException;
 import co.com.bancolombia.usecase.user.input.UserUseCasePort;
 import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 //@Slf4j
@@ -29,30 +28,5 @@ public class UserUseCase implements UserUseCasePort {
                 return userRepository.save(user.withEmail(emailNormalized));
                     //.doOnSuccess(u -> log.info("user created id={} email={}", u.getId(), normalized));
             });
-    }
-
-    @Override
-    public Mono<User> updateUser(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Flux<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public Mono<User> getUserById(String id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public Mono<Boolean> existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Override
-    public Mono<Boolean> existsByDocument(String document) {
-        return userRepository.existsByDocument(document);
     }
 }
