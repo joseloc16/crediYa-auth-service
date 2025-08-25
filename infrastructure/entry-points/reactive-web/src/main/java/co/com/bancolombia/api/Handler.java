@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -23,6 +24,7 @@ public class Handler {
     private final UserDTOMapper userMapper;
     private final RequestValidator requestValidator;
 
+    @Transactional
     public Mono<ServerResponse> listenSaveUser(ServerRequest req) {
         return req.bodyToMono(CreateUserDTO.class)
             .switchIfEmpty(Mono.error(new ValidationException("El body es requerido")))
