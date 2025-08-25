@@ -32,7 +32,7 @@ public class UserEntity {
     private String email;
 
     @Column("documento_identidad")
-    private String identityDocument;
+    private String document;
 
     @Column("telefono")
     private String phoneNumber;

@@ -4,6 +4,7 @@ import co.com.bancolombia.api.dto.CreateUserDTO;
 import co.com.bancolombia.api.dto.EditUserDTO;
 import co.com.bancolombia.api.mapper.UserDTOMapper;
 import co.com.bancolombia.usecase.user.input.UserUseCasePort;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,15 +21,26 @@ public class Handler {
 
     private final UserUseCasePort userUseCasePort;
     private final UserDTOMapper userMapper;
+    private final RequestValidator requestValidator;
 
     public Mono<ServerResponse> listenSaveUser(ServerRequest req) {
         return req.bodyToMono(CreateUserDTO.class)
+            .switchIfEmpty(Mono.error(new ValidationException("El body es requerido")))
+            .flatMap(requestValidator::validateUser)
             .map(userMapper::toModel)
             .flatMap(userUseCasePort::saveUser)
             .map(userMapper::toResponse)
             .flatMap(dto -> ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(dto));
+                .bodyValue(dto))
+            .onErrorResume(ValidationException.class, e ->
+                ServerResponse.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of(
+                        "message", "Validation failed",
+                        "details", e.getMessage()
+                    ))
+            );
     }
 
     public Mono<ServerResponse> listenUpdateUser(ServerRequest req) {
@@ -58,12 +70,6 @@ public class Handler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(dto))
             .switchIfEmpty(ServerResponse.notFound().build());
-    }
-
-    public Mono<ServerResponse> listenDeleteUser(ServerRequest serverRequest) {
-        var id = serverRequest.pathVariable("id");
-        return userUseCasePort.deleteUser(id)
-            .then(ServerResponse.noContent().build());
     }
 
     public Mono<ServerResponse> listenExistsByEmail(ServerRequest req) {

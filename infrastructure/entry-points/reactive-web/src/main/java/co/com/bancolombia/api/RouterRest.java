@@ -19,13 +19,6 @@ public class RouterRest {
 
     @Bean
     public RouterFunction<ServerResponse> routerFunction() {
-        return route(POST(userPath.getUsers()), userHandler::listenSaveUser)
-            .andRoute(PUT(userPath.getUsers()), userHandler::listenUpdateUser)
-            .andRoute(GET(userPath.getUsers()), userHandler::listenGetAllUsers)
-            .andRoute(GET(userPath.getUsersById()), userHandler::listenGetUserById)
-            .andRoute(DELETE(userPath.getUsersById()), userHandler::listenDeleteUser)
-            .andRoute(GET(userPath.getUsersExists()), userHandler::listenExistsByEmail)
-            .andRoute(GET(userPath.getUsersExists()).and(queryParam("email", s -> true)), userHandler::listenExistsByEmail)
-            .andRoute(GET(userPath.getUsersExists()).and(queryParam("document", s -> true)), userHandler::listenExistsByDocument);
+        return route(POST(userPath.getUsers()), userHandler::listenSaveUser);
     }
 }

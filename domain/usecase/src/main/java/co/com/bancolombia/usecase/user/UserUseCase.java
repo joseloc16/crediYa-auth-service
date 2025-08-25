@@ -33,11 +33,6 @@ public class UserUseCase implements UserUseCasePort {
     }
 
     @Override
-    public Mono<Void> deleteUser(String id) {
-        return userRepository.deleteById(id);
-    }
-
-    @Override
     public Mono<Boolean> existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }

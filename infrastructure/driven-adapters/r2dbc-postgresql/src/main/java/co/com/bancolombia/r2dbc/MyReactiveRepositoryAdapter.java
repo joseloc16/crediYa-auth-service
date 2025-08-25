@@ -6,7 +6,6 @@ import co.com.bancolombia.r2dbc.entity.UserEntity;
 import co.com.bancolombia.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -21,32 +20,12 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     @Override
-    public Mono<User> save(User user) {
-        return super.save(user);
-    }
-
-    @Override
-    public Flux<User> findAll() {
-        return super.findAll();
-    }
-
-    @Override
-    public Mono<User> findById(String id) {
-        return super.findById(id);
-    }
-
-    @Override
-    public Mono<Void> deleteById(String id) {
-        return repository.deleteById(id);
-    }
-
-    @Override
     public Mono<Boolean> existsByEmail(String email) {
-        return null;
+        return repository.existsByEmail(email);
     }
 
     @Override
     public Mono<Boolean> existsByDocument(String document) {
-        return null;
+        return repository.existsByDocument(document);
     }
 }

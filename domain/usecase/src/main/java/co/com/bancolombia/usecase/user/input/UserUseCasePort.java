@@ -9,7 +9,6 @@ public interface UserUseCasePort {
     Mono<User> updateUser(User user);
     Flux<User> getAllUsers();
     Mono<User> getUserById(String id);
-    Mono<Void> deleteUser(String id);
     Mono<Boolean> existsByEmail(String email);
     Mono<Boolean> existsByDocument(String document);
 }
