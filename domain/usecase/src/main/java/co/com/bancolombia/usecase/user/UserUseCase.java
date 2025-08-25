@@ -15,7 +15,7 @@ public class UserUseCase implements UserUseCasePort {
 
     @Override
     public Mono<User> saveUser(User user) {
-        return userRepository.existsByEmail(user.getEmail())
+        return userRepository.existsByEmail(user.getEmail().trim().toLowerCase())
             .flatMap(exists -> {
                 if (Boolean.TRUE.equals(exists)) {
                     return Mono.error(new EmailAlreadyUsedException(user.getEmail()));

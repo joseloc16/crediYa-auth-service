@@ -3,7 +3,6 @@ package co.com.bancolombia.api;
 import co.com.bancolombia.api.dto.CreateUserDTO;
 import co.com.bancolombia.api.dto.EditUserDTO;
 import co.com.bancolombia.api.mapper.UserDTOMapper;
-import co.com.bancolombia.usecase.user.exception.EmailAlreadyUsedException;
 import co.com.bancolombia.usecase.user.input.UserUseCasePort;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -35,23 +34,7 @@ public class Handler {
             .map(userMapper::toResponse)
             .flatMap(dto -> ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(dto))
-            .onErrorResume(EmailAlreadyUsedException.class, e ->
-                ServerResponse.status(HttpStatus.CONFLICT)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("message", "email already registered")))
-            .onErrorResume(org.springframework.dao.DuplicateKeyException.class, e ->
-                ServerResponse.status(HttpStatus.CONFLICT)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("message", "email already registered")))
-            .onErrorResume(ValidationException.class, e ->
-                ServerResponse.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of(
-                        "message", "Validation failed",
-                        "details", e.getMessage()
-                    ))
-            );
+                .bodyValue(dto));
     }
 
     public Mono<ServerResponse> listenUpdateUser(ServerRequest req) {
