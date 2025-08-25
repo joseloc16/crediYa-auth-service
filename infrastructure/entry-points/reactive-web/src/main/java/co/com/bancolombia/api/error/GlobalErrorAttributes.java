@@ -1,6 +1,7 @@
 package co.com.bancolombia.api.error;
 
 import co.com.bancolombia.usecase.user.exception.EmailAlreadyUsedException;
+import co.com.bancolombia.usecase.user.exception.RoleNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
@@ -47,7 +48,11 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
                 .map(fe -> Map.of("field", fe.getField(),
                     "message", fe.getDefaultMessage()))
                 .toList());
-        }
+        } else if (ex instanceof RoleNotFoundException rnfe) {
+        body.put("details", java.util.List.of(
+            Map.of("field", "roleId", "message", rnfe.getMessage())
+        ));
+    }
 
         return body;
     }
@@ -55,6 +60,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
     private HttpStatus resolveStatus(Throwable ex) {
         if (ex instanceof EmailAlreadyUsedException) return HttpStatus.CONFLICT;
         if (ex instanceof org.springframework.dao.DuplicateKeyException) return HttpStatus.CONFLICT;
+        if (ex instanceof RoleNotFoundException) return HttpStatus.NOT_FOUND;
         if (ex instanceof jakarta.validation.ConstraintViolationException) return HttpStatus.BAD_REQUEST;
         if (ex instanceof ValidationException) return HttpStatus.BAD_REQUEST;
         if (ex instanceof org.springframework.web.server.ResponseStatusException rse)
@@ -65,6 +71,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
     private String resolveCode(Throwable ex) {
         if (ex instanceof EmailAlreadyUsedException
             || ex instanceof org.springframework.dao.DuplicateKeyException) return "EMAIL_EXISTS";
+        if (ex instanceof RoleNotFoundException) return "ROLE_NOT_FOUND";
         if (ex instanceof jakarta.validation.ConstraintViolationException
             || ex instanceof ValidationException
             || ex instanceof org.springframework.web.bind.support.WebExchangeBindException) return "VALIDATION_ERROR";

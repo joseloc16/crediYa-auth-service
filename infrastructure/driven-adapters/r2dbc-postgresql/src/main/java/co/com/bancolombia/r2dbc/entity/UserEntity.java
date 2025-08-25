@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-@Table("users")
+@Table("Usuario")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
