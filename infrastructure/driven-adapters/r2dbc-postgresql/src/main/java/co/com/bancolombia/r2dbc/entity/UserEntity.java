@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Table("users")
 @AllArgsConstructor
@@ -18,27 +19,30 @@ import java.math.BigDecimal;
 public class UserEntity {
 
     @Id
-    @Column("user?id")
-    private String idUsuario;
+    @Column("id_usuario")
+    private String userId;
 
     @Column("nombre")
-    private String nombre;
+    private String firstName;
 
     @Column("apellido")
-    private String apellido;
+    private String lastName;
 
     @Column("email")
     private String email;
 
     @Column("documento_identidad")
-    private String documentoIdentidad;
+    private String identityDocument;
 
     @Column("telefono")
-    private String telefono;
+    private String phoneNumber;
 
     @Column("id_rol")
-    private Long idRol;
+    private String roleId;
 
     @Column("salario_base")
-    private BigDecimal salarioBase;
+    private BigDecimal baseSalary;
+
+    @Column("fecha_nacimiento")
+    Timestamp birthDate;
 }
