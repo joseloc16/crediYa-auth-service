@@ -1,5 +1,6 @@
 package co.com.bancolombia.api.error;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties.Resources;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+@Slf4j
 @Component
 @Order(-2)
 public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
@@ -37,8 +39,16 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
     private Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         Map<String, Object> props = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         int status = (int) props.getOrDefault("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        Throwable ex = getError(request);
+
+        if (status >= 500)
+            log.error("{} {} -> {} {}", request.methodName(), request.path(), status, ex.toString(), ex);
+        else
+            log.warn("{} {} -> {} - {}", request.methodName(), request.path(), status, ex.getMessage());
+
         return ServerResponse.status(status)
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(props));
     }
+
 }

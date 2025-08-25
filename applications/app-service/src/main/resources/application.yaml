@@ -43,3 +43,11 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
+
+logging:
+  level:
+    co.com.bancolombia: DEBUG
+    org.springframework.web: INFO
+    org.springframework.r2dbc.core: DEBUG     # queries de DatabaseClient
+    io.r2dbc.postgresql.QUERY: INFO           # SQL del driver
+    io.r2dbc.postgresql.PARAM: DEBUG          # parámetros (usa con cuidado)

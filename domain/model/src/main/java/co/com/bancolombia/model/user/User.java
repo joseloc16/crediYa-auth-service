@@ -1,9 +1,5 @@
 package co.com.bancolombia.model.user;
-import lombok.Builder;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -17,7 +13,7 @@ public class User {
     private String idUsuario;
     private String firstName;
     private String lastName;
-    private String email;
+    @With private String email;
     private String document;
     private String phoneNumber;
     private String roleId;
