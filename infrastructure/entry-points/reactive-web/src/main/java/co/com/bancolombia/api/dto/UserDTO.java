@@ -24,7 +24,7 @@ public record UserDTO(
             + "\\.[A-Za-z]{2,}$")
     String email,
 
-    String identityDocument,
+    String document,
 
     String phoneNumber,
 

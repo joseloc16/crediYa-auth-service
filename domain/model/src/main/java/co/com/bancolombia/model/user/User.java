@@ -18,7 +18,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private String identityDocument;
+    private String document;
     private String phoneNumber;
     private String roleId;
     private BigDecimal baseSalary;
