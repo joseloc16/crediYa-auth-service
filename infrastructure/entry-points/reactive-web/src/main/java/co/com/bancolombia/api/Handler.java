@@ -42,15 +42,14 @@ public class Handler {
     }
 
     public Mono<ServerResponse> listenFindByEmail(ServerRequest req) {
-        final String path = req.path();
-        final String email = req.pathVariable("email");
+        final String email = req.queryParam("email")
+            .orElseThrow(() -> new org.springframework.web.server.ServerWebInputException("email is required"));
 
         return userUseCasePort.findByEmail(email)
             .map(userMapper::toResponse)
             .flatMap(dto -> ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                 .bodyValue(dto))
-            .doOnSuccess(r -> log.info("GET {} <- 200 OK", path))
-            .doOnError(e -> log.warn("GET {} <- error: {}", path, e.toString()));
+            .switchIfEmpty(ServerResponse.notFound().build());
     }
 }
