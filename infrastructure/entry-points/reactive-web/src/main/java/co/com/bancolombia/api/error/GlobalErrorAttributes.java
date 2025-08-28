@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.error;
 
-import co.com.bancolombia.usecase.user.exception.EmailAlreadyUsedException;
-import co.com.bancolombia.usecase.user.exception.RoleNotFoundException;
+import co.com.bancolombia.model.commons.exceptions.EmailAlreadyUsedException;
+import co.com.bancolombia.model.commons.exceptions.RoleNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;

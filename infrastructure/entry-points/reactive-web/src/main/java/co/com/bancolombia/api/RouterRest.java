@@ -94,6 +94,7 @@ public class RouterRest {
         )
     })
     public RouterFunction<ServerResponse> routerFunction() {
-        return route(POST(userPath.getUsers()), userHandler::listenSaveUser);
+        return route(POST(userPath.getUser()), userHandler::listenSaveUser)
+            .andRoute(GET(userPath.getUserByEmail()), userHandler::listenFindByEmail);
     }
 }

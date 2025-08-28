@@ -4,5 +4,6 @@ import co.com.bancolombia.model.user.User;
 import reactor.core.publisher.Mono;
 
 public interface UserUseCasePort {
-    Mono<User> saveUser(User user);
+    Mono<User> save(User user);
+    Mono<User> findByEmail(String email);
 }
