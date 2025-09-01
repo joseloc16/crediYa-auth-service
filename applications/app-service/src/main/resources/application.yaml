@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8016
 spring:
   application:
     name: "Auth-Service"
@@ -25,15 +25,14 @@ cors:
 
 routes:
   paths:
-    users: "/api/v1/usuarios"
-    usersById: "/api/v1/usuarios/{id}"
-    usersExists: "/api/v1/usuarios/exists"
+    user: "/api/v1/usuarios"
+    #userByEmail: "/api/v1/usuarios/exists/{email}"
 
 adapters:
   r2dbc:
     host: "localhost"
     port: 5432
-    database: "crediya-db"
+    database: "credi-auth"
     schema: "public"
     username: "joseloc"
     password: "crediya"

@@ -2,6 +2,7 @@ package co.com.bancolombia.api;
 
 import co.com.bancolombia.api.dto.CreateUserDTO;
 import co.com.bancolombia.api.mapper.UserDTOMapper;
+import co.com.bancolombia.model.commons.util.EmailUtils;
 import co.com.bancolombia.usecase.user.input.UserUseCasePort;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -31,9 +30,9 @@ public class Handler {
         return req.bodyToMono(CreateUserDTO.class)
             .switchIfEmpty(Mono.error(new ValidationException("El body es requerido")))
             .flatMap(requestValidator::validateUser)
-            .doOnNext(dto -> log.debug("validated request email={}", maskEmail(dto.email())))
+            .doOnNext(dto -> log.debug("validated request email={}", EmailUtils.maskEmail(dto.email())))
             .map(userMapper::toModel)
-            .flatMap(userUseCasePort::saveUser)
+            .flatMap(userUseCasePort::save)
             .map(userMapper::toResponse)
             .flatMap(dto -> ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -42,10 +41,15 @@ public class Handler {
             .doOnError(e -> log.warn("POST {} <- error: {}", path, e.toString()));
     }
 
-    private static String maskEmail(String email) {
-        if (email == null) return null;
-        int at = email.indexOf('@');
-        if (at <= 1) return "***" + email.substring(Math.max(at, 0));
-        return email.charAt(0) + "***" + email.substring(at);
+    public Mono<ServerResponse> listenFindByEmail(ServerRequest req) {
+        final String email = req.queryParam("email")
+            .orElseThrow(() -> new org.springframework.web.server.ServerWebInputException("email is required"));
+
+        return userUseCasePort.findByEmail(email)
+            .map(userMapper::toResponse)
+            .flatMap(dto -> ServerResponse.ok()
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .bodyValue(dto))
+            .switchIfEmpty(ServerResponse.notFound().build());
     }
 }
