@@ -3,6 +3,8 @@ package co.com.bancolombia.usecase.auth;
 import co.com.bancolombia.model.dto.LogInDTO;
 import co.com.bancolombia.model.dto.SignUpDTO;
 import co.com.bancolombia.model.dto.TokenDTO;
+import co.com.bancolombia.model.security.PasswordEncoderGateway;
+import co.com.bancolombia.model.token.TokenGateway;
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserGateway;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import java.util.Set;
 public class AuthUseCase {
 
     private final UserGateway userGateway;
+    private final PasswordEncoderGateway passwordEncoder;
+    private final TokenGateway tokenGateway;
 
     public Mono<User> signUp(SignUpDTO dto) {
         return userGateway.existsByEmail(dto.email())
@@ -37,7 +41,7 @@ public class AuthUseCase {
                     dto.baseSalary(),
                     dto.birthDate(),
                     roles,
-                    dto.password()
+                    passwordEncoder.encode(dto.password())
                 );
 
                 return userGateway.save(u);
@@ -45,6 +49,10 @@ public class AuthUseCase {
     }
 
     public Mono<TokenDTO> login(LogInDTO dto) {
-        return null;
+        return userGateway.findByEmail(dto.email())
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("bad credentials")))
+            .flatMap(u -> passwordEncoder.matches(dto.password(), u.passwordHash())
+                ? Mono.just(new TokenDTO(tokenGateway.generateToken(u.email(), u.roles())))
+                : Mono.error(new IllegalArgumentException("bad credentials")));
     }
 }

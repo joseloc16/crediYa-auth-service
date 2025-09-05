@@ -4,6 +4,7 @@ import co.com.bancolombia.model.dto.LogInDTO;
 import co.com.bancolombia.model.dto.SignUpDTO;
 import co.com.bancolombia.usecase.auth.AuthUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -27,6 +28,7 @@ public class AuthHandler {
             .flatMap(token -> ServerResponse.ok().bodyValue(token));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Mono<ServerResponse> hello(ServerRequest request) {
         return ServerResponse.ok().bodyValue("Hello");
     }

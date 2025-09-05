@@ -50,3 +50,7 @@ logging:
     org.springframework.r2dbc.core: DEBUG     # queries de DatabaseClient
     io.r2dbc.postgresql.QUERY: INFO           # SQL del driver
     io.r2dbc.postgresql.PARAM: DEBUG          # parámetros (usa con cuidado)
+
+jwt:
+  secret: "ZGlhbmFkaWFuYWRpYW5hZGlhbmFkaWFuYWRpYW5hZGlhbmFkaWFuYWRpYW5hZGlhbmFkaWFuYQ=="
+  expiration: "300000"
