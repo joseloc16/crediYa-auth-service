@@ -4,6 +4,7 @@ import co.com.bancolombia.model.role.Role;
 import co.com.bancolombia.model.role.gateways.RoleRepository;
 import co.com.bancolombia.r2dbc.entity.RoleEntity;
 import co.com.bancolombia.r2dbc.helper.ReactiveAdapterOperations;
+import co.com.bancolombia.r2dbc.repository.RoleReactiveRepository;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
