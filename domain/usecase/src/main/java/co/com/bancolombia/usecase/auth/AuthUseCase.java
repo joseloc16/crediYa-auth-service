@@ -1,7 +1,7 @@
 package co.com.bancolombia.usecase.auth;
 
-import co.com.bancolombia.model.dto.LogInDTO;
-import co.com.bancolombia.model.dto.SignUpDTO;
+import co.com.bancolombia.model.dto.Credentials;
+import co.com.bancolombia.model.dto.SignUpCommand;
 import co.com.bancolombia.model.dto.TokenDTO;
 import co.com.bancolombia.model.security.PasswordEncoderGateway;
 import co.com.bancolombia.model.token.TokenGateway;
@@ -20,11 +20,11 @@ public class AuthUseCase {
     private final PasswordEncoderGateway passwordEncoder;
     private final TokenGateway tokenGateway;
 
-    public Mono<User> signUp(SignUpDTO dto) {
+    public Mono<User> signUp(SignUpCommand dto) {
         return userGateway.existsByEmail(dto.email())
             .flatMap(exists -> {
                 if (exists) {
-                    return Mono.error(new IllegalArgumentException("email already in use"));
+                    return Mono.error(new IllegalArgumentException("Email ya registrado"));
                 }
                 Set<String> roles =
                     (dto.roles() == null || dto.roles().isEmpty())
@@ -48,7 +48,7 @@ public class AuthUseCase {
             });
     }
 
-    public Mono<TokenDTO> login(LogInDTO dto) {
+    public Mono<TokenDTO> login(Credentials dto) {
         return userGateway.findByEmail(dto.email())
             .switchIfEmpty(Mono.error(new IllegalArgumentException("bad credentials")))
             .flatMap(u -> passwordEncoder.matches(dto.password(), u.passwordHash())

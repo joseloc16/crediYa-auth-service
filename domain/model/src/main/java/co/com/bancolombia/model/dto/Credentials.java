@@ -1,6 +1,6 @@
 package co.com.bancolombia.model.dto;
 
-public record LogInDTO(
+public record Credentials(
     String email,
     String password
 ) {}

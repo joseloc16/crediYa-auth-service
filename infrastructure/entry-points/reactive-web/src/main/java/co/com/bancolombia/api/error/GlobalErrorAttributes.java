@@ -5,9 +5,12 @@ import co.com.bancolombia.model.commons.exceptions.RoleNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -49,10 +52,10 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
                     "message", fe.getDefaultMessage()))
                 .toList());
         } else if (ex instanceof RoleNotFoundException rnfe) {
-        body.put("details", java.util.List.of(
-            Map.of("field", "roleId", "message", rnfe.getMessage())
-        ));
-    }
+            body.put("details", java.util.List.of(
+                Map.of("field", "roleId", "message", rnfe.getMessage())
+            ));
+        }
 
         return body;
     }
@@ -69,20 +72,30 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
     }
 
     private String resolveCode(Throwable ex) {
-        if (ex instanceof EmailAlreadyUsedException
-            || ex instanceof org.springframework.dao.DuplicateKeyException) return "EMAIL_EXISTS";
-        if (ex instanceof RoleNotFoundException) return "ROLE_NOT_FOUND";
+        if (ex instanceof EmailAlreadyUsedException) return "El email ya está en uso.";
+        if (ex instanceof RoleNotFoundException) return "El rol especificado no existe.";
+        if (ex instanceof DuplicateKeyException dke) return humanizeDuplicate(dke);
         if (ex instanceof jakarta.validation.ConstraintViolationException
             || ex instanceof ValidationException
-            || ex instanceof org.springframework.web.bind.support.WebExchangeBindException) return "VALIDATION_ERROR";
-        if (ex instanceof org.springframework.web.server.ResponseStatusException) return "ERROR";
+            || ex instanceof WebExchangeBindException) return "VALIDATION_ERROR";
+        if (ex instanceof ResponseStatusException) return "ERROR";
         return "INTERNAL_ERROR";
     }
 
     private String resolveMessage(Throwable ex) {
-        if (ex instanceof org.springframework.web.server.ResponseStatusException rse) {
+        if (ex instanceof ResponseStatusException rse) {
             return rse.getReason() != null ? rse.getReason() : rse.getMessage();
         }
         return ex.getMessage();
+    }
+
+    private String humanizeDuplicate(DuplicateKeyException ex) {
+        String msg = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        if (msg != null) {
+            String m = msg.toLowerCase();
+            if (m.contains("uq_usuario_email")) return "El email ya esta en uso.";
+            if (m.contains("uq_usuario_documento")) return "El documento ya esta en uso.";
+        }
+        return "Registro duplicado.";
     }
 }
