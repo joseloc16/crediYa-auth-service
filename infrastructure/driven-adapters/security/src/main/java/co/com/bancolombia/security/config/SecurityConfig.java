@@ -4,6 +4,7 @@ import co.com.bancolombia.security.jwt.filter.JwtFilter;
 import co.com.bancolombia.security.repository.SecurityContextRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -32,8 +33,13 @@ public class SecurityConfig {
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http, JwtFilter jwtFilter) {
         return http
             .csrf(ServerHttpSecurity.CsrfSpec::disable)
-            .authorizeExchange(exchangeSpec -> exchangeSpec.pathMatchers("/auth/**").permitAll()
-                .anyExchange().authenticated())
+            .authorizeExchange(ex -> ex
+                .pathMatchers(HttpMethod.POST,
+                    "/api/v1/usuarios/signup",
+                    "/api/v1/usuarios/login"
+                ).permitAll()
+                .anyExchange().authenticated()
+            )
             .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
             .securityContextRepository(securityContextRepository)
             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

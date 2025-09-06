@@ -24,7 +24,7 @@ public class AuthUseCase {
         return userGateway.existsByEmail(dto.email())
             .flatMap(exists -> {
                 if (exists) {
-                    return Mono.error(new IllegalArgumentException("Email ya registrado"));
+                    return Mono.error(new IllegalArgumentException("Correo electronico ya registrado"));
                 }
                 Set<String> roles =
                     (dto.roles() == null || dto.roles().isEmpty())

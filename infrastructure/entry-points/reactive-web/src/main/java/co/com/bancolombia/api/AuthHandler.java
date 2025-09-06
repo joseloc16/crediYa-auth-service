@@ -3,7 +3,6 @@ package co.com.bancolombia.api;
 import co.com.bancolombia.api.dto.SignUpRequest;
 import co.com.bancolombia.api.mapper.UserEntryMapper;
 import co.com.bancolombia.model.dto.Credentials;
-import co.com.bancolombia.model.dto.SignUpCommand;
 import co.com.bancolombia.usecase.auth.AuthUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -30,7 +29,6 @@ public class AuthHandler {
             .map(userEntryMapper::toResponse)
             .flatMap(u -> ServerResponse.status(201).contentType(MediaType.APPLICATION_JSON).bodyValue(u));
     }
-
 
     public Mono<ServerResponse> login(ServerRequest request) {
         return request.bodyToMono(Credentials.class)

@@ -24,9 +24,11 @@ cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
 
 routes:
+  base: "/api/v1/usuarios"
   paths:
-    user: "/api/v1/usuarios"
-    #userByEmail: "/api/v1/usuarios/exists/{email}"
+    login: "/login"
+    signup: "/signup"
+    #userByEmail: "/exists/{email}"
 
 adapters:
   r2dbc:
