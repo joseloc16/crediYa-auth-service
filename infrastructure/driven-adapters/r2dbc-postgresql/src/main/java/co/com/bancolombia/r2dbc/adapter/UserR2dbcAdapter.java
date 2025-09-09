@@ -37,5 +37,12 @@ public class UserR2dbcAdapter implements UserGateway {
             .doOnNext(e -> log.info("User found: {}", e.getName()))
             .map(mapper::toDomain);
     }
+
+    @Override
+    public Mono<User> findByDocumentNumber(String documentNumber) {
+        return userRepository.findByDocumentNumber(documentNumber)
+            .doOnNext(e -> log.info("User found: {}", e.getName()))
+            .map(mapper::toDomain);
+    }
 }
 

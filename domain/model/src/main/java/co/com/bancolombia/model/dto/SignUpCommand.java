@@ -9,7 +9,7 @@ public record SignUpCommand(
     String lastName,
     String email,
     String password,
-    String document,
+    String documentNumber,
     String phoneNumber,
     BigDecimal baseSalary,
     Timestamp birthDate,

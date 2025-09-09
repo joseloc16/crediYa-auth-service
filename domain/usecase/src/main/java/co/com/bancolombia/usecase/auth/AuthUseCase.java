@@ -36,7 +36,7 @@ public class AuthUseCase {
                     dto.name(),
                     dto.lastName(),
                     dto.email(),
-                    dto.document(),
+                    dto.documentNumber(),
                     dto.phoneNumber(),
                     dto.baseSalary(),
                     dto.birthDate(),

@@ -10,7 +10,7 @@ public record User(
     String name,
     String lastName,
     String email,
-    String document,
+    String documentNumber,
     String phoneNumber,
     BigDecimal baseSalary,
     Timestamp birthDate,

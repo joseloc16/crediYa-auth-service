@@ -13,7 +13,7 @@ public record UserResponse(
     String name,
     String lastName,
     String email,
-    String document,
+    String documentNumber,
     String phoneNumber,
     BigDecimal baseSalary,
     Timestamp birthDate,

@@ -22,6 +22,7 @@ public class RouterAuth {
         return RouterFunctions
             .route(POST(userPath.getBase() + userPath.getPaths().getSignup()), authHandler::signUp)
             .andRoute(POST(userPath.getBase() + userPath.getPaths().getLogin()), authHandler::login)
+            .andRoute(GET(userPath.getBase() + userPath.getPaths().getByDocument()), authHandler::getByDocument)
             .andRoute(GET("/hello"), authHandler::hello);
     }
 }

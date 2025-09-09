@@ -9,4 +9,6 @@ public interface UserGateway {
     Mono<User> save(User user);
 
     Mono<User> findByEmail(String email);
+
+    Mono<User> findByDocumentNumber(String documentNumber);
 }

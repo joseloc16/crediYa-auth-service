@@ -28,6 +28,8 @@ routes:
   paths:
     login: "/login"
     signup: "/signup"
+    byDocument: "/{documentNumber}"
+    #byDocument: "/{documentType}/{documentNumber}"
     #userByEmail: "/exists/{email}"
 
 adapters:

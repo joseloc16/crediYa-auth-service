@@ -17,5 +17,6 @@ public class UserPath {
     public static class Paths {
         private String login;
         private String signup;
+        private String byDocument;
     }
 }

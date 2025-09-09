@@ -12,4 +12,7 @@ public interface UserReactiveRepository extends ReactiveCrudRepository<UserEntit
 
     @Query("select * from usuario where email = :email")
     Mono<UserEntity> findByEmail(String email);
+
+    @Query("select * from usuario where documento_identidad = :documentNumber")
+    Mono<UserEntity> findByDocumentNumber(String documentNumber);
 }

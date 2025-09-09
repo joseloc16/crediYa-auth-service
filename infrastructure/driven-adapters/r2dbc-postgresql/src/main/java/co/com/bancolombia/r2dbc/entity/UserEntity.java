@@ -24,7 +24,7 @@ public class UserEntity {
     @Column("nombre") private String name;
     @Column("apellido") private String lastName;
     @Column("email") private String email;
-    @Column("documento_identidad") private String document;
+    @Column("documento_identidad") private String documentNumber;
     @Column("telefono") private String phoneNumber;
     @Column("salario_base") private BigDecimal baseSalary;
     @Column("fecha_nacimiento") private Timestamp birthDate;

@@ -34,7 +34,7 @@ public record SignUpRequest(
     String password,
 
     @JsonProperty("documento_identidad")
-    String document,// validar si debe ser obligatorio y unico
+    String documentNumber,// validar si debe ser obligatorio y unico
 
     @Pattern(
         regexp = "^\\+?[0-9. ()-]{7,25}$",
