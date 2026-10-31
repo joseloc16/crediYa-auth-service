@@ -42,14 +42,10 @@ public class Handler {
     }
 
     public Mono<ServerResponse> listenFindByEmail(ServerRequest req) {
-        final String email = req.queryParam("email")
-            .orElseThrow(() -> new org.springframework.web.server.ServerWebInputException("email is required"));
-
+        final String email = req.pathVariable("documentNumber");
         return userUseCasePort.findByEmail(email)
             .map(userMapper::toResponse)
-            .flatMap(dto -> ServerResponse.ok()
-                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                .bodyValue(dto))
-            .switchIfEmpty(ServerResponse.notFound().build());
+            .flatMap(body -> ServerResponse.ok().bodyValue(body))
+            .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).build());
     }
 }
